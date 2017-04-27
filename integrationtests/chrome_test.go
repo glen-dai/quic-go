@@ -45,7 +45,7 @@ func init() {
 var _ = Describe("Chrome tests", func() {
 	It("does not work with mismatching versions", func() {
 		versionForUs := protocol.SupportedVersions[0]
-		versionForChrome := protocol.SupportedVersions[len(protocol.SupportedVersions)-1]
+		versionForChrome := protocol.SupportedVersions[1]
 
 		// If both are equal, this test doesn't make any sense.
 		if versionForChrome == versionForUs {
@@ -78,6 +78,9 @@ var _ = Describe("Chrome tests", func() {
 			)
 
 			BeforeEach(func() {
+				if version == protocol.Version37 {
+					Skip("Skipping Chrome test with QUIC version 37")
+				}
 				supportedVersionsBefore = protocol.SupportedVersions
 				protocol.SupportedVersions = []protocol.VersionNumber{version}
 				wd = getWebdriverForVersion(version)
